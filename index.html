@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAS(S) Remedial 2027</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SAS(S) Remedial 2027</p>
+          <h1>Remedial Student Tracker</h1>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="controls card">
+          <label for="searchInput">Search student or subject</label>
+          <input id="searchInput" type="text" placeholder="Try Reg#, name, class, or subject..." />
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat card">
+            <span class="stat-label">Total students</span>
+            <strong id="totalStudents">0</strong>
+          </article>
+          <article class="stat card">
+            <span class="stat-label">Subjects tracked</span>
+            <strong id="totalSubjects">0</strong>
+          </article>
+          <article class="stat card">
+            <span class="stat-label">Classes</span>
+            <strong id="totalClasses">0</strong>
+          </article>
+        </section>
+
+        <section class="card table-card">
+          <div class="table-header">
+            <h2>Student list</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Reg#</th>
+                  <th>Name</th>
+                  <th>Class</th>
+                  <th>Selected subjects</th>
+                </tr>
+              </thead>
+              <tbody id="studentTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
