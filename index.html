@@ -3,36 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SAS(S) Remedial 2027</title>
+    <title>Remedial Schedule Portal</title>
+    <meta
+      name="description"
+      content="Search for a student and view their remedial lesson schedule and selection status."
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="page-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">SAS(S) Remedial 2027</p>
-          <h1>Remedial Student Access</h1>
+        <div class="brand-wrap" aria-label="School remedial portal">
+          <div class="brand-mark">S</div>
+          <div>
+            <p class="eyebrow">School portal</p>
+            <h1>Remedial Schedule</h1>
+          </div>
         </div>
       </header>
 
       <main class="content">
-        <section class="card form-card">
-          <h2>Student verification</h2>
-          <p class="helper-text">Enter part of the student name to search and reveal the details.</p>
+        <section class="card hero-card" aria-labelledby="search-heading">
+          <div class="search-panel">
+            <div class="search-copy">
+              <h2 id="search-heading">Search for a student</h2>
+              <p>
+                Enter part of the student name to check whether they have been selected
+                for remedial lessons.
+              </p>
+            </div>
 
-          <div class="stacked-form">
-            <label>
-              <span>Name</span>
-              <input id="nameInput" type="text" placeholder="e.g. OZER or ZHENG" />
-            </label>
+            <form id="searchForm" novalidate>
+              <label for="nameInput">Student name</label>
+              <div class="input-row">
+                <input
+                  id="nameInput"
+                  name="nameInput"
+                  type="text"
+                  placeholder="Enter student name"
+                  autocomplete="off"
+                />
+                <button type="submit" class="primary-btn">Search</button>
+              </div>
+              <button type="button" id="resetBtn" class="secondary-btn">Clear</button>
+            </form>
+
+            <div id="statusMessage" class="status-message" aria-live="polite"></div>
           </div>
-
-          <button id="verifyBtn" type="button">Search details</button>
-          <div id="statusMessage" class="status-message" aria-live="polite"></div>
         </section>
 
-        <section id="resultCard" class="card result-card hidden">
-          <h2>Student details</h2>
+        <section id="resultCard" class="card result-card hidden" aria-live="polite">
+          <div class="result-header">
+            <h2>Student details</h2>
+            <span id="selectionBadge" class="selection-badge not-selected">Not selected</span>
+          </div>
           <div id="resultContent"></div>
         </section>
       </main>
