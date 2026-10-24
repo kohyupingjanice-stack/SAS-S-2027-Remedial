@@ -11,48 +11,29 @@
       <header class="topbar">
         <div>
           <p class="eyebrow">SAS(S) Remedial 2027</p>
-          <h1>Remedial Student Tracker</h1>
+          <h1>Remedial Student Access</h1>
         </div>
       </header>
 
       <main class="content">
-        <section class="controls card">
-          <label for="searchInput">Search student or subject</label>
-          <input id="searchInput" type="text" placeholder="Try Reg#, name, class, or subject..." />
+        <section class="card form-card">
+          <h2>Student verification</h2>
+          <p class="helper-text">Enter part of the student name to search and reveal the details.</p>
+
+          <div class="stacked-form">
+            <label>
+              <span>Name</span>
+              <input id="nameInput" type="text" placeholder="e.g. OZER or ZHENG" />
+            </label>
+          </div>
+
+          <button id="verifyBtn" type="button">Search details</button>
+          <div id="statusMessage" class="status-message" aria-live="polite"></div>
         </section>
 
-        <section class="stats-grid">
-          <article class="stat card">
-            <span class="stat-label">Total students</span>
-            <strong id="totalStudents">0</strong>
-          </article>
-          <article class="stat card">
-            <span class="stat-label">Subjects tracked</span>
-            <strong id="totalSubjects">0</strong>
-          </article>
-          <article class="stat card">
-            <span class="stat-label">Classes</span>
-            <strong id="totalClasses">0</strong>
-          </article>
-        </section>
-
-        <section class="card table-card">
-          <div class="table-header">
-            <h2>Student list</h2>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Reg#</th>
-                  <th>Name</th>
-                  <th>Class</th>
-                  <th>Selected subjects</th>
-                </tr>
-              </thead>
-              <tbody id="studentTableBody"></tbody>
-            </table>
-          </div>
+        <section id="resultCard" class="card result-card hidden">
+          <h2>Student details</h2>
+          <div id="resultContent"></div>
         </section>
       </main>
     </div>
