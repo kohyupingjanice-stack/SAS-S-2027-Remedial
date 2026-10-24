@@ -1,65 +1,94 @@
-const state = {
-  rows: [],
-  query: ""
-};
+const statusMessage = document.getElementById("statusMessage");
+const resultCard = document.getElementById("resultCard");
+const resultContent = document.getElementById("resultContent");
+const regInput = document.getElementById("regInput");
+const nameInput = document.getElementById("nameInput");
+const verifyBtn = document.getElementById("verifyBtn");
 
-const tableBody = document.getElementById("studentTableBody");
-const searchInput = document.getElementById("searchInput");
-const totalStudents = document.getElementById("totalStudents");
-const totalSubjects = document.getElementById("totalSubjects");
-const totalClasses = document.getElementById("totalClasses");
+let students = [];
 
-searchInput.addEventListener("input", (event) => {
-  state.query = event.target.value.trim().toLowerCase();
-  render();
+verifyBtn.addEventListener("click", () => {
+  const enteredReg = normalizeText(regInput.value);
+  const enteredName = normalizeText(nameInput.value);
+
+  if (!enteredReg || !enteredName) {
+    showStatus("Please enter both the student name and register number.", "error");
+    hideResult();
+    return;
+  }
+
+  const match = students.find(
+    (student) =>
+      normalizeText(student.reg) === enteredReg &&
+      normalizeName(student.name) === normalizeName(enteredName)
+  );
+
+  if (!match) {
+    showStatus("Access denied. The name and register number do not match.", "error");
+    hideResult();
+    return;
+  }
+
+  showStatus("Access granted.", "success");
+  showResult(match);
 });
 
 fetch("data/Testing_Remedial.csv")
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("CSV file not found");
-    }
-    return response.text();
+  .then((response) => response.text())
+  .then((csvText) => {
+    students = parseCsv(csvText);
+    hideResult();
   })
-  .then((text) => {
-    state.rows = parseCsv(text);
-    render();
-  })
-  .catch((error) => {
-    console.error(error);
-    tableBody.innerHTML = '<tr><td colspan="4" class="empty-state">Unable to load the remedial roster.</td></tr>';
+  .catch(() => {
+    showStatus("Unable to load student data.", "error");
   });
 
 function parseCsv(text) {
   const lines = text.split(/\r?\n/).filter((line) => line.trim());
-  const records = [];
+  const rows = [];
+  let dayLabels = [];
 
-  for (const line of lines) {
+  lines.forEach((line, index) => {
     const values = parseCsvLine(line);
+
+    if (values[0] && values[0].trim() === "Reg#") {
+      dayLabels = values.slice(3).map((label) => label.trim());
+    }
+
+    if (!values[0] || !values[1] || !values[2]) {
+      return;
+    }
+
     const reg = (values[0] || "").trim();
     const name = (values[1] || "").trim();
     const cls = (values[2] || "").trim();
 
     if (!reg || !name || !cls || /Reg#|Subject\(s\) selected/i.test(reg)) {
-      continue;
+      return;
     }
 
-    const subjectCells = values.slice(3).map((cell) => cell.trim()).filter(Boolean);
-    const subjects = subjectCells
-      .flatMap((value) => value.split(/\s*;\s*/))
-      .map((value) => value.trim())
-      .filter(Boolean)
-      .filter((value) => !/^\s*$/.test(value));
+    const subjectEntries = values
+      .slice(3)
+      .map((cell, cellIndex) => ({
+        day: dayLabels[cellIndex] || "Unspecified",
+        subject: (cell || "").trim()
+      }))
+      .filter((entry) => entry.subject && entry.subject !== "")
+      .map((entry) => ({
+        day: entry.day,
+        subject: entry.subject,
+        label: `${entry.day}: ${entry.subject}`
+      }));
 
-    records.push({
+    rows.push({
       reg,
       name,
       className: cls,
-      subjects
+      subjects: subjectEntries
     });
-  }
+  });
 
-  return records;
+  return rows;
 }
 
 function parseCsvLine(text) {
@@ -93,66 +122,58 @@ function parseCsvLine(text) {
   return values;
 }
 
-function render() {
-  const filtered = state.rows.filter((row) => {
-    if (!state.query) return true;
-
-    const haystack = [
-      row.reg,
-      row.name,
-      row.className,
-      ...row.subjects
-    ]
-      .join(" ")
-      .toLowerCase();
-
-    return haystack.includes(state.query);
-  });
-
-  renderTable(filtered);
-  renderStats(filtered);
+function normalizeText(value) {
+  return String(value || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
 }
 
-function renderTable(rows) {
-  if (!rows.length) {
-    tableBody.innerHTML = '<tr><td colspan="4" class="empty-state">No matching students found.</td></tr>';
-    return;
-  }
-
-  tableBody.innerHTML = rows
-    .map(
-      (row) => `
-        <tr>
-          <td>${escapeHtml(row.reg)}</td>
-          <td>${escapeHtml(row.name)}</td>
-          <td>${escapeHtml(row.className)}</td>
-          <td>
-            <div class="subject-list">
-              ${row.subjects.length
-                ? row.subjects
-                    .map((subject) => `<span class="subject-pill">${escapeHtml(subject)}</span>`)
-                    .join("")
-                : '<span class="subject-pill">No subject assigned</span>'}
-            </div>
-          </td>
-        </tr>
-      `
-    )
-    .join("");
+function normalizeName(value) {
+  return normalizeText(value)
+    .replace(/[^a-z0-9 ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function renderStats(rows) {
-  const uniqueSubjects = new Set();
-  const uniqueClasses = new Set();
+function showStatus(message, type) {
+  statusMessage.textContent = message;
+  statusMessage.className = `status-message ${type}`;
+}
 
-  rows.forEach((row) => {
-    row.subjects.forEach((subject) => uniqueSubjects.add(subject));
-    uniqueClasses.add(row.className);
-  });
+function showResult(student) {
+  resultCard.classList.remove("hidden");
+  resultContent.innerHTML = `
+    <div class="result-row">
+      <div class="info-box">
+        <span class="label">Name</span>
+        <strong>${escapeHtml(student.name)}</strong>
+      </div>
+      <div class="info-box">
+        <span class="label">Register Number</span>
+        <strong>${escapeHtml(student.reg)}</strong>
+      </div>
+      <div class="info-box">
+        <span class="label">Class</span>
+        <strong>${escapeHtml(student.className)}</strong>
+      </div>
+      <div class="info-box full-width">
+        <span class="label">Remedial schedule</span>
+        <div class="subject-list">
+          ${student.subjects.length
+            ? student.subjects
+                .map((item) => `<span class="subject-pill">${escapeHtml(item.label)}</span>`)
+                .join("")
+            : '<span class="subject-pill">No subject assigned</span>'}
+        </div>
+      </div>
+    </div>
+  `;
+}
 
-  totalStudents.textContent = rows.length;
-  totalSubjects.textContent = uniqueSubjects.size;
-  totalClasses.textContent = uniqueClasses.size;
+function hideResult() {
+  resultCard.classList.add("hidden");
+  resultContent.innerHTML = "";
 }
 
 function escapeHtml(value) {
