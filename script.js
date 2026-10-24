@@ -1,25 +1,23 @@
-* {
-  box-sizing: border-box;
+:root {
+  --bg-top: #eef6ff;
+  --bg-bottom: #f9fbff;
+  --card: rgba(255, 255, 255, 0.96);
+  --card-border: #dfeeff;
+  --primary: #124b9f;
+  --primary-dark: #0d2d62;
+  --primary-soft: #edf5ff;
+  --accent: #4ea1ff;
+  --text: #1d2d3d;
+  --muted: #5f6d82;
+  --success: #1e875d;
+  --error: #c03939;
+  --table-head: #e9f1ff;
+  --table-row-alt: #fafcff;
+  --shadow: 0 18px 40px rgba(18, 52, 101, 0.12);
 }
 
-:root {
-  --bg-top: #eaf4ff;
-  --bg-bottom: #f7faff;
-  --card: rgba(255, 255, 255, 0.96);
-  --card-border: #d7e8ff;
-  --primary: #124b9f;
-  --primary-dark: #0c2b61;
-  --primary-soft: #edf5ff;
-  --primary-soft-2: #dfeeff;
-  --accent: #4b9cff;
-  --text: #1d2c3d;
-  --muted: #5f6f86;
-  --success: #1d8d5c;
-  --error: #bf2d2d;
-  --warning: #d78b12;
-  --shadow: 0 18px 42px rgba(18, 51, 103, 0.12);
-  --table-head: #e7f0ff;
-  --table-row-alt: #fafcff;
+* {
+  box-sizing: border-box;
 }
 
 html {
@@ -43,7 +41,7 @@ input {
 .page-shell {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 32px 20px 50px;
+  padding: 32px 20px 48px;
 }
 
 .topbar {
@@ -57,12 +55,12 @@ input {
 }
 
 .brand-mark {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
   display: grid;
   place-items: center;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   color: white;
   font-size: 1.8rem;
   font-weight: 800;
@@ -71,16 +69,16 @@ input {
 
 .eyebrow {
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
   font-size: 0.72rem;
-  color: var(--primary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   font-weight: 800;
+  color: var(--primary);
 }
 
 h1 {
-  margin: 2px 0 0;
-  font-size: clamp(2.2rem, 2vw + 1.4rem, 3.1rem);
+  margin: 4px 0 0;
+  font-size: clamp(2.2rem, 2vw + 1.4rem, 3.2rem);
   line-height: 1.15;
   color: var(--primary-dark);
 }
@@ -116,8 +114,8 @@ h1 {
 
 .search-copy p {
   margin: 0;
-  font-size: 1.05rem;
   color: var(--muted);
+  font-size: 1.05rem;
 }
 
 #searchForm {
@@ -139,21 +137,20 @@ h1 {
 
 input {
   flex: 1;
-  width: 100%;
   min-height: 54px;
   padding: 0.8rem 1rem;
   border-radius: 14px;
-  border: 1.5px solid #cfdefd;
-  background: #fff;
+  border: 1.5px solid #d3e4ff;
+  background: white;
   color: var(--text);
-  font-size: 1.05rem;
+  font-size: 1.03rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(75, 156, 255, 0.12);
+  box-shadow: 0 0 0 4px rgba(78, 161, 255, 0.12);
 }
 
 .primary-btn,
@@ -178,7 +175,7 @@ input:focus {
   justify-self: start;
   background: #edf5ff;
   color: var(--primary-dark);
-  border: 1px solid #d4e7ff;
+  border: 1px solid #d5e8ff;
 }
 
 .primary-btn:hover,
@@ -202,10 +199,6 @@ input:focus {
   color: var(--success);
 }
 
-.result-card {
-  display: block;
-}
-
 .result-card.hidden {
   display: none;
 }
@@ -223,22 +216,22 @@ input:focus {
   align-items: center;
   padding: 0.45rem 0.8rem;
   border-radius: 999px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   border: 1px solid transparent;
 }
 
 .selection-badge.selected {
-  background: rgba(29, 141, 92, 0.12);
+  background: rgba(30, 135, 93, 0.1);
   color: var(--success);
-  border-color: rgba(29, 141, 92, 0.2);
+  border-color: rgba(30, 135, 93, 0.2);
 }
 
 .selection-badge.not-selected {
-  background: rgba(191, 45, 45, 0.08);
+  background: rgba(192, 57, 57, 0.08);
   color: var(--error);
-  border-color: rgba(191, 45, 45, 0.2);
+  border-color: rgba(192, 57, 57, 0.18);
 }
 
 .student-summary {
@@ -249,8 +242,8 @@ input:focus {
 }
 
 .summary-item {
-  background: #fff;
-  border: 1px solid #dbe9ff;
+  background: white;
+  border: 1px solid #dfeeff;
   border-radius: 14px;
   padding: 14px 16px;
 }
@@ -258,29 +251,29 @@ input:focus {
 .summary-item .label {
   display: block;
   margin-bottom: 6px;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
 .summary-item strong {
-  font-size: 1.05rem;
   color: var(--primary-dark);
+  font-size: 1.05rem;
   word-break: break-word;
 }
 
 .schedule-wrapper {
   overflow-x: auto;
-  border-radius: 16px;
   border: 1px solid #d6e4ff;
+  border-radius: 16px;
 }
 
 .schedule-table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 720px;
+  border-collapse: collapse;
   background: white;
 }
 
@@ -296,7 +289,7 @@ input:focus {
 .schedule-table th {
   background: var(--table-head);
   color: var(--primary-dark);
-  font-size: 1.05rem;
+  font-size: 1.04rem;
   font-weight: 800;
 }
 
@@ -305,8 +298,8 @@ input:focus {
 }
 
 .schedule-table td:first-child {
-  font-weight: 800;
   color: var(--primary-dark);
+  font-weight: 800;
 }
 
 .empty-state {
